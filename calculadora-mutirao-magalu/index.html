@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Garimpo Digital | Mutirão Magalu</title>
+  <style>
+    :root {
+      --primary: #0086ff;
+      --primary-dark: #0056b3;
+      --green: #10b981;
+      --green-dark: #059669;
+      --bg: #edf2f7;
+      --card-bg: #ffffff;
+      --text-dark: #111827;
+      --text-muted: #4b5563;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100dvh;
+      padding: 16px 12px;
+    }
+
+    header {
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+      margin-bottom: 12px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Títulos das Linhas de Descarte */
+    .category-header {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-top: 8px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-left: 4px;
+    }
+
+    /* Cards dos Itens */
+    .item-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 8px;
+    }
+
+    .item-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .item-icon {
+      font-size: 1.6rem;
+    }
+
+    .item-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .item-subtitle {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Botões de Contador */
+    .counter-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f3f4f6;
+      padding: 4px;
+      border-radius: 10px;
+    }
+
+    .btn-counter {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      border: none;
+      background: white;
+      color: var(--text-dark);
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    .btn-counter:active {
+      transform: scale(0.92);
+    }
+
+    .counter-value {
+      font-size: 0.95rem;
+      font-weight: 800;
+      min-width: 18px;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    /* Seção de Impacto Calculado */
+    .impact-box {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      border: 2px solid #e2e8f0;
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+    }
+
+    .impact-box h2 {
+      font-size: 1rem;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .impact-metric {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .metric-icon {
+      font-size: 1.2rem;
+      margin-bottom: 2px;
+    }
+
+    .metric-val {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .metric-lbl {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Card Oficial de Promessa de Descarte */
+    .story-card-wrapper {
+      display: none;
+      margin-top: 8px;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .story-card {
+      background: linear-gradient(135deg, #0086ff 0%, #0056b3 100%);
+      color: white;
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,134,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .story-card .tag {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(5px);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .story-card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .story-card .summary-list {
+      font-size: 0.82rem;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin: 8px 0;
+      line-height: 1.4;
+      text-align: left;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .story-card .impact-highlight {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #34d399;
+      margin-top: 6px;
+    }
+
+    .story-card .team-footer {
+      font-size: 0.75rem;
+      margin-top: 12px;
+      opacity: 0.9;
+    }
+
+    .print-tip {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      color: #92400e;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      text-align: center;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    footer strong {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>⛏️ Garimpo Digital</h1>
+    <p>Simule o valor reciclável do seu e-lixo!</p>
+  </header>
+
+  <div class="main-container">
+
+    <!-- Caixa Fixa de Impacto -->
+    <div class="impact-box">
+      <h2>🌱 Impacto Total Gerado</h2>
+      <div class="impact-grid">
+        <div class="impact-metric">
+          <div class="metric-icon">🪙</div>
+          <div class="metric-val" id="val-gold">0.00g</div>
+          <div class="metric-lbl">Ouro Estimado</div>
+        </div>
+        <div class="impact-metric">
+          <div class="metric-icon">🥉</div>
+          <div class="metric-val" id="val-copper">0g</div>
+          <div class="metric-lbl">Cobre / Metais</div>
+        </div>
+        <div class="impact-metric">
+          <div class="metric-icon">🌍</div>
+          <div class="metric-val" id="val-co2">0.0kg</div>
+          <div class="metric-lbl">CO₂ Evitado</div>
+        </div>
+        <div class="impact-metric">
+          <div class="metric-icon">💧</div>
+          <div class="metric-val" id="val-water">0L</div>
+          <div class="metric-lbl">Água Salva</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista de Seleção de Itens por Categoria -->
+    <div id="items-list"></div>
+
+    <!-- Card para o Instagram Story -->
+    <div class="story-card-wrapper" id="story-card-wrapper">
+      <div class="story-card">
+        <span class="tag">🌿 PROMESSA DE DESCARTE</span>
+        <h3>Eu vou Reciclar! 🔋</h3>
+
+        <p style="font-size: 0.8rem; opacity: 0.95;">Vou levar ao Mutirão Magalu:</p>
+        
+        <div class="summary-list" id="card-summary"></div>
+
+        <div class="impact-highlight" id="card-impact"></div>
+
+        <div class="team-footer">
+          ⚡ <strong>Time Choque de Consciência</strong><br>
+          #MutiraoDoEletronico #Magalu
+        </div>
+      </div>
+
+      <div class="print-tip">
+        📸 <strong>DESAFIO:</strong> Tire print desta tela, poste nos Stories e marque a equipe!
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Desenvolvido com 💚 pelo time <strong>Choque de Consciência</strong>
+  </footer>
+
+  <script>
+    // Lista completa de itens categorizados
+    const categoriesData = [
+      {
+        categoryName: '⚪ LINHA BRANCA (Grandes Eletrodomésticos)',
+        items: [
+          { id: 'geladeira', name: 'Geladeira', icon: '🧊', sub: 'Cobre, Aço e Alumínio', gold: 0, copper: 850, co2: 85.0, water: 800 },
+          { id: 'lavadora', name: 'Máquina de Lavar', icon: '🧺', sub: 'Cobre e Motores de Aço', gold: 0, copper: 650, co2: 60.0, water: 550 },
+          { id: 'tanquinho', name: 'Tanquinho', icon: '🫧', sub: 'Motor elétrico e plásticos', gold: 0, copper: 400, co2: 35.0, water: 300 },
+          { id: 'arcond', name: 'Ar-Condicionado', icon: '❄️', sub: 'Cobre e Alumínio em abundância', gold: 0, copper: 1200, co2: 90.0, water: 750 },
+          { id: 'fogao_elet', name: 'Fogão Elétrico', icon: '🍳', sub: 'Aço inox e fios pesados', gold: 0, copper: 350, co2: 40.0, water: 280 }
+        ]
+      },
+      {
+        categoryName: '🔵 LINHA AZUL (Eletroportáteis de Casa)',
+        items: [
+          { id: 'airfryer', name: 'Air Fryer / Grill', icon: '🍟', sub: 'Resistências e motores', gold: 0, copper: 180, co2: 8.5, water: 80 },
+          { id: 'microondas', name: 'Micro-ondas', icon: '🍿', sub: 'Transformadores e cobre', gold: 0, copper: 450, co2: 25.0, water: 200 },
+          { id: 'forno_elet', name: 'Forno Elétrico', icon: '🍕', sub: 'Aço, cobre e fiação', gold: 0, copper: 300, co2: 20.0, water: 160 },
+          { id: 'ventilador', name: 'Ventilador', icon: '🌀', sub: 'Bobina de cobre e plástico', gold: 0, copper: 220, co2: 6.0, water: 60 },
+          { id: 'secador', name: 'Secador / Prancha', icon: '💇', sub: 'Fiação e motor elétrico', gold: 0, copper: 120, co2: 4.0, water: 40 }
+        ]
+      },
+      {
+        categoryName: '🟤 LINHA MARROM (Áudio, Vídeo e Imagem)',
+        items: [
+          { id: 'tv_tubo', name: 'TV de Tubo (CRT)', icon: '📺', sub: 'Grandes bobinas de cobre', gold: 0.02, copper: 600, co2: 22.0, water: 250 },
+          { id: 'tv_smart', name: 'TV Smart / Monitor', icon: '🖥️', sub: 'Placas e ligas metálicas', gold: 0.08, copper: 250, co2: 15.0, water: 180 },
+          { id: 'som', name: 'Aparelho de Som', icon: '🔊', sub: 'Transformadores e alto-falantes', gold: 0.01, copper: 380, co2: 12.0, water: 130 }
+        ]
+      },
+      {
+        categoryName: '🟢 LINHA VERDE (Informática e Comunicação)',
+        items: [
+          { id: 'celular', name: 'Celular / Smartphone', icon: '📱', sub: 'Ouro, Prata e Cobalto', gold: 0.035, copper: 15, co2: 1.5, water: 32 },
+          { id: 'notebook', name: 'Notebook / Tablet', icon: '💻', sub: 'Alumínio, Placas e Ouro', gold: 0.18, copper: 120, co2: 12.0, water: 150 },
+          { id: 'cabo', name: 'Cabos & Fios', icon: '🔌', sub: 'Cobre de alta pureza', gold: 0, copper: 45, co2: 0.6, water: 8 },
+          { id: 'impressora', name: 'Impressora / Scanner', icon: '🖨️', sub: 'Motores de passo e placas', gold: 0.05, copper: 220, co2: 12.0, water: 100 },
+          { id: 'videogame', name: 'Videogame / Console', icon: '🎮', sub: 'Processadores e cobre', gold: 0.12, copper: 150, co2: 10.0, water: 110 }
+        ]
+      }
+    ];
+
+    const counts = {};
+    const itemsListEl = document.getElementById('items-list');
+    const storyCardWrapper = document.getElementById('story-card-wrapper');
+
+    // Inicializar o objeto de contagem
+    categoriesData.forEach(cat => {
+      cat.items.forEach(item => {
+        counts[item.id] = 0;
+      });
+    });
+
+    // Renderizar a lista organizada por categorias
+    function renderItems() {
+      itemsListEl.innerHTML = '';
+
+      categoriesData.forEach(cat => {
+        const catHeader = document.createElement('div');
+        catHeader.className = 'category-header';
+        catHeader.textContent = cat.categoryName;
+        itemsListEl.appendChild(catHeader);
+
+        cat.items.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'item-card';
+          div.innerHTML = `
+            <div class="item-info">
+              <span class="item-icon">${item.icon}</span>
+              <div>
+                <div class="item-title">${item.name}</div>
+                <div class="item-subtitle">${item.sub}</div>
+              </div>
+            </div>
+            <div class="counter-controls">
+              <button class="btn-counter" onclick="changeCount('${item.id}', -1)">-</button>
+              <span class="counter-value" id="count-${item.id}">0</span>
+              <button class="btn-counter" onclick="changeCount('${item.id}', 1)">+</button>
+            </div>
+          `;
+          itemsListEl.appendChild(div);
+        });
+      });
+    }
+
+    // Alterar contagem
+    function changeCount(id, delta) {
+      if (counts[id] + delta < 0) return;
+      counts[id] += delta;
+      document.getElementById(`count-${id}`).textContent = counts[id];
+      calculateImpact();
+    }
+
+    // Calcular o Impacto Total
+    function calculateImpact() {
+      let totalGold = 0;
+      let totalCopper = 0;
+      let totalCo2 = 0;
+      let totalWater = 0;
+      let totalItems = 0;
+
+      let summaryItems = [];
+
+      categoriesData.forEach(cat => {
+        cat.items.forEach(item => {
+          const qty = counts[item.id];
+          if (qty > 0) {
+            totalItems += qty;
+            totalGold += item.gold * qty;
+            totalCopper += item.copper * qty;
+            totalCo2 += item.co2 * qty;
+            totalWater += item.water * qty;
+
+            summaryItems.push(`• <strong>${qty}x</strong> ${item.name}`);
+          }
+        });
+      });
+
+      // Atualizar interface
+      document.getElementById('val-gold').textContent = totalGold.toFixed(2) + 'g';
+      document.getElementById('val-copper').textContent = totalCopper >= 1000 ? (totalCopper / 1000).toFixed(1) + 'kg' : Math.round(totalCopper) + 'g';
+      document.getElementById('val-co2').textContent = totalCo2.toFixed(1) + 'kg';
+      document.getElementById('val-water').textContent = Math.round(totalWater) + 'L';
+
+      // Atualizar ou Ocultar Card de Promessa
+      if (totalItems > 0) {
+        storyCardWrapper.style.display = 'block';
+        document.getElementById('card-summary').innerHTML = summaryItems.join('<br>');
+        
+        const copperTxt = totalCopper >= 1000 ? (totalCopper / 1000).toFixed(1) + 'kg de Cobre/Metais' : Math.round(totalCopper) + 'g de Cobre/Metais';
+        const goldTxt = totalGold > 0 ? ` e ${totalGold.toFixed(2)}g de Ouro` : '';
+        
+        document.getElementById('card-impact').innerHTML = `🌱 Recuperação estimada: ${copperTxt}${goldTxt}!`;
+      } else {
+        storyCardWrapper.style.display = 'none';
+      }
+    }
+
+    renderItems();
+  </script>
+</body>
+</html>
